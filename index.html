@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Anonimowa ankieta wyborcza — PARODIA</title>
+<style>
+  :root{
+    --bg:#eef9f8;
+    --text:#242424;
+    --muted:#666;
+    --accent:#087f8c;
+    --accent2:#61b7c5;
+    --card:#ffffff;
+    --border:#d8d8d8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(circle at 90% 5%, rgba(157,215,232,.55), transparent 28%),
+      linear-gradient(135deg,#effafa 0%,#f7fbfb 52%,#e9f7fa 100%);
+    min-height:100vh;
+  }
+  .browser{
+    position:sticky; top:0; z-index:10;
+    height:64px;
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid #ddd;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:600; font-size:18px;
+  }
+  .browser .x, .browser .menu{
+    position:absolute; top:10px;
+    width:44px;height:44px;border-radius:50%;
+    display:grid;place-items:center;
+    border:1px solid #ddd;background:#fff;font-size:28px;font-weight:300;
+  }
+  .browser .x{left:18px}
+  .browser .menu{right:18px;font-size:25px}
+  .wrap{max-width:760px;margin:0 auto;padding:42px 18px 70px}
+  .hero{
+    padding:28px 8px 30px;
+  }
+  h1{
+    margin:0 0 24px;
+    font-size:38px; line-height:1.12; font-weight:500;
+    letter-spacing:-.5px;
+  }
+  .intro{
+    font-size:19px; line-height:1.65;
+    margin:0 0 26px;
+  }
+  .notice{
+    font-size:16px;line-height:1.55;
+    color:#444;
+    border-top:1px solid rgba(0,0,0,.08);
+    padding-top:22px;
+  }
+  .badge{
+    display:inline-block;
+    background:#222;color:white;
+    border-radius:999px;padding:6px 11px;
+    font-size:13px;font-weight:700;letter-spacing:.4px;
+    margin-bottom:15px;
+  }
+  .question{
+    background:rgba(255,255,255,.72);
+    border-radius:8px;
+    padding:26px 20px 24px;
+    margin:18px 0;
+    box-shadow:0 1px 4px rgba(0,0,0,.06);
+    border:1px solid rgba(0,0,0,.05);
+  }
+  .qtitle{
+    font-size:23px;line-height:1.35;margin:0 0 12px;
+  }
+  .hint{color:#666;font-size:15px;margin:0 0 18px}
+  label.option{
+    display:flex;align-items:flex-start;gap:14px;
+    padding:13px 3px;
+    font-size:18px;line-height:1.4;
+    cursor:pointer;
+  }
+  input[type=radio],input[type=checkbox]{
+    appearance:none;
+    width:25px;height:25px;min-width:25px;
+    border:2px solid #777;background:white;
+    margin:1px 0 0;cursor:pointer;
+    position:relative;
+  }
+  input[type=radio]{border-radius:50%}
+  input[type=checkbox]{border-radius:3px}
+  input:checked{border-color:var(--accent)}
+  input[type=radio]:checked::after{
+    content:"";position:absolute;inset:5px;border-radius:50%;background:var(--accent);
+  }
+  input[type=checkbox]:checked::after{
+    content:"✓";position:absolute;left:3px;top:-2px;
+    color:var(--accent);font-size:21px;font-weight:800;
+  }
+  textarea, input[type=text]{
+    width:100%;border:0;border-bottom:2px solid #888;
+    background:transparent;padding:10px 2px;
+    font:inherit;font-size:18px;outline:none;
+  }
+  textarea{min-height:100px;resize:vertical}
+  textarea:focus,input[type=text]:focus{border-bottom-color:var(--accent)}
+  button{
+    border:0;border-radius:5px;
+    padding:14px 24px;
+    background:var(--accent);color:white;
+    font-size:17px;font-weight:600;cursor:pointer;
+    box-shadow:0 2px 5px rgba(0,0,0,.16);
+  }
+  button:hover{filter:brightness(.95)}
+  .reset{
+    background:transparent;color:#333;box-shadow:none;margin-left:12px;
+  }
+  .result{
+    display:none;
+    margin-top:24px;padding:24px;
+    background:#fff;border-left:5px solid var(--accent);
+    border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.08);
+    font-size:18px;line-height:1.55;
+  }
+  .result.sent{
+    min-height:230px;
+    border-left:0;
+    display:flex !important;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:transparent;
+    box-shadow:none;
+    padding:45px 20px;
+  }
+  .checkmark{
+    width:74px;height:74px;
+    border-radius:50%;
+    background:#107c10;
+    color:white;
+    display:grid;
+    place-items:center;
+    font-size:48px;
+    font-weight:500;
+    line-height:1;
+    margin-bottom:22px;
+  }
+  .sent-title{
+    font-size:26px;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .sent-subtitle{
+    color:#666;
+    font-size:17px;
+  }
+  .footer{text-align:center;color:#777;font-size:13px;margin-top:34px}
+  @media(max-width:600px){
+    .browser{height:58px;font-size:16px}
+    .browser .x,.browser .menu{width:40px;height:40px;top:8px}
+    .browser .x{left:12px}.browser .menu{right:12px}
+    .wrap{padding:28px 14px 50px}
+    h1{font-size:31px}
+    .intro{font-size:18px}
+    .qtitle{font-size:21px}
+    label.option{font-size:17px}
+  }
+</style>
+</head>
+<body>
+  <div class="browser">
+    <div class="x">×</div>
+    forms.cloud.microsoft
+    <div class="menu">☰</div>
+  </div>
+
+  <main class="wrap">
+    <section class="hero">
+<h1>Anonimowa ankieta wyborcza<br>Dariusza Wawrzyniaka.</h1>
+
+      <p class="intro">
+        Nie będę składał Wam obietnic, których nie spełnię, ponieważ tym razem
+        obiecuję tylko rzeczy absolutnie niezbędne: lepsze przerwy, więcej
+        spokoju i przynajmniej jedną decyzję podjętą bez tworzenia komisji
+        śledczej. 😎
+      </p>
+
+      <p class="intro">
+        Jeśli zostanę Przewodniczącym Samorządu Uczniowskiego, będę
+        reprezentował Wasze interesy, słuchał Waszych pomysłów i regularnie
+        sprawdzał, czy automat z przekąskami nadal kradnie pieniądze.
+        Wasz głos ma znaczenie. Szczególnie jeśli zaznaczycie opcję
+        „darmowe jedzenie”.
+      </p>
+</section>
+
+    <form id="survey">
+      <section class="question">
+        <h2 class="qtitle">1. Czy podoba Ci się taki sposób komunikacji i docierania do WSZYSTKICH uczniów?</h2>
+        <label class="option"><input type="radio" name="q1" value="tak" required> Tak, wygląda podejrzanie profesjonalnie.</label>
+        <label class="option"><input type="radio" name="q1" value="nie"> Nie, wolę wiadomość napisaną na kartce i przyklejoną taśmą.</label>
+      </section>
+
+      <section class="question">
+        <h2 class="qtitle">2. Wybierz maksymalnie 2 priorytety kampanii.</h2>
+        <p class="hint">Wybierz co najwyżej 2 opcje. Komisja wyborcza patrzy. 👁️</p>
+
+        <label class="option"><input class="priority" type="checkbox" name="q2" value="przerwa"> Chociaż jedna absurdalnie długa przerwa w tygodniu.</label>
+        <label class="option"><input class="priority" type="checkbox" name="q2" value="komunikacja"> Szybka komunikacja uczniów z samorządem, najlepiej bez wysyłania 17 maili.</label>
+        <label class="option"><input class="priority" type="checkbox" name="q2" value="szatnia"> Wolny wstęp do szatni. Tak, naprawdę.</label>
+        <label class="option"><input class="priority" type="checkbox" name="q2" value="spotkania"> Spotkania samorządu z przewodniczącymi klas i przynajmniej jedną osobą, która wie, co się dzieje.</label>
+        <label class="option"><input class="priority" type="checkbox" name="q2" value="pizza"> Pizza na każdych wyborach. To nie jest żart. To jest program.</label>
+      </section>
+
+      <section class="question">
+        <h2 class="qtitle">3. Co powinno zostać wprowadzone natychmiast?</h2>
+        <label class="option"><input type="radio" name="q3" value="cisza" required> Cisza na korytarzu podczas kartkówek.</label>
+        <label class="option"><input type="radio" name="q3" value="muzyka"> Muzyka na przerwach, ale bez „Despacito” 48 razy dziennie.</label>
+        <label class="option"><input type="radio" name="q3" value="nic"> Nic. Jest idealnie. Proszę nie dotykać systemu.</label>
+      </section>
+
+      <section class="question">
+        <h2 class="qtitle">4. Masz własny pomysł? Napisz go poniżej.</h2>
+        <textarea id="idea" placeholder="Np. „zakaz sprawdzianów w poniedziałki”..."></textarea>
+      </section>
+
+      <section class="question">
+        <h2 class="qtitle">5. Czy zagłosujesz na tę parodię?</h2>
+        <label class="option"><input type="radio" name="q5" value="oczywiscie" required> Oczywiście. Demokracja zwyciężyła.</label>
+        <label class="option"><input type="radio" name="q5" value="zastanowie"> Muszę to skonsultować z Radą Starszych.</label>
+        <label class="option"><input type="radio" name="q5" value="nie"> Nie, bo jestem tajnym agentem innego kandydata.</label>
+      </section>
+
+      <button type="submit">Wyślij odpowiedzi</button>
+      <button type="reset" class="reset">Wyczyść</button>
+
+      <div id="result" class="result"></div>
+    </form>
+
+    <div class="footer">Dziękujemy za wypełnienie formularza.</div>
+  </main>
+
+<script>
+  const form = document.getElementById('survey');
+  const result = document.getElementById('result');
+  const priorities = [...document.querySelectorAll('.priority')];
+
+  priorities.forEach(box => {
+    box.addEventListener('change', () => {
+      const checked = priorities.filter(x => x.checked);
+      if (checked.length > 2) box.checked = false;
+    });
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const chosen = priorities.filter(x => x.checked).map(x => x.parentElement.textContent.trim());
+    const idea = document.getElementById('idea').value.trim();
+
+    result.style.display = 'block';
+    result.className = 'result sent';
+    result.innerHTML = `
+      <div class="checkmark">✓</div>
+      <div class="sent-title">Wysłano wiadomość</div>
+      <div class="sent-subtitle">Twoja odpowiedź została wysłana.</div>
+    `;
+    form.querySelectorAll('input, textarea, button').forEach(el => el.disabled = true);
+    result.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  form.addEventListener('reset', () => {
+    setTimeout(() => result.style.display = 'none', 0);
+  });
+</script>
+</body>
+</html>
